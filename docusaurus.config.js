@@ -7,6 +7,52 @@
 import { themes as prismThemes } from 'prism-react-renderer';
 const math = require('remark-math');
 const katex = require('rehype-katex');
+
+const defaultSettings = {
+  breadcrumbs: true,
+  editUrl: 'https://github.com/dyte-io/docs/tree/main/',
+  showLastUpdateTime: true,
+  sidebarCollapsible: true,
+  remarkPlugins: [[require('@docusaurus/remark-plugin-npm2yarn'), { sync: true }]],
+  sidebarPath: require.resolve('./sidebars-default.js'),
+};
+
+const docs = [
+  {
+    id: 'crypto',
+    path: 'crypto',
+    routeBasePath: '/crypto',
+  },
+  {
+    id: 'tool',
+    path: 'tool',
+    routeBasePath: '/tool',
+  },
+  {
+    id: 'university',
+    path: 'university',
+    routeBasePath: '/university',
+  },
+];
+
+/**
+ * Create a section
+ * @param {import('@docusaurus/plugin-content-docs').Options} options
+ */
+function create_doc_plugin({ sidebarPath = require.resolve('./sidebars-default.js'), ...options }) {
+  return [
+    '@docusaurus/plugin-content-docs',
+    /** @type {import('@docusaurus/plugin-content-docs').Options} */
+    ({
+      ...defaultSettings,
+      sidebarPath,
+      ...options,
+    }),
+  ];
+}
+
+const docs_plugins = docs.map((doc) => create_doc_plugin(doc));
+
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: 'My Site',
@@ -34,50 +80,24 @@ const config = {
     defaultLocale: 'en',
     locales: ['en'],
   },
-  plugins: [
-    [
-      '@docusaurus/plugin-content-docs',
-      {
-        id: 'crypto',
-        path: 'crypto',
-        routeBasePath: 'crypto',
-        sidebarPath: require.resolve('./sidebarsCrypto.js'),
-        remarkPlugins: [math],
-        rehypePlugins: [katex],
-        showLastUpdateAuthor: true,
-        showLastUpdateTime: true,
-      },
-    ],
-    [
-      '@docusaurus/plugin-content-docs',
-      {
-        id: 'university',
-        path: 'university',
-        routeBasePath: 'university',
-        sidebarPath: require.resolve('./sidebarsUniversity.js'),
-        remarkPlugins: [math],
-        rehypePlugins: [katex],
-        showLastUpdateAuthor: true,
-        showLastUpdateTime: true,
-      },
-    ],
-  ],
+  plugins: [...docs_plugins],
   presets: [
     [
       'classic',
       /** @type {import('@docusaurus/preset-classic').Options} */
       ({
         docs: {
-          sidebarPath: './sidebars.js',
-          // Please change this to your repo.
-          // Remove this to remove the "edit this page" links.
-          editUrl: 'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
-          remarkPlugins: [math],
-          rehypePlugins: [katex],
-          // Equivalent to `enableUpdateBy`.
-          showLastUpdateAuthor: true,
-          // Equivalent to `enableUpdateTime`.
-          showLastUpdateTime: true,
+          // sidebarPath: './sidebars.js',
+          // // Please change this to your repo.
+          // // Remove this to remove the "edit this page" links.
+          // editUrl: 'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
+          // remarkPlugins: [math],
+          // rehypePlugins: [katex],
+          // // Equivalent to `enableUpdateBy`.
+          // showLastUpdateAuthor: true,
+          // // Equivalent to `enableUpdateTime`.
+          // showLastUpdateTime: true,
+          ...defaultSettings,
         },
         blog: {
           showReadingTime: true,
@@ -111,29 +131,43 @@ const config = {
         },
         items: [
           {
-            type: 'docSidebar',
-            sidebarId: 'tutorialSidebar',
-            position: 'left',
-            label: 'Tutorial',
-          },
-          // {
-          //   to: '/university',
-          //   label: 'University',
-          //   position: 'left',
-          // },
-          {
             to: '/crypto',
             label: 'Crypto',
+            sidebarId: 'cryptoSidebar',
             position: 'left',
           },
-          // {
-          //   title: 'Blog',
-          //   to: '/blog',
-          // },
+
+          {
+            type: 'docSidebar',
+            sidebarId: 'tutorialSidebar',
+            position: 'right',
+            label: 'Tutorial',
+          },
+
+          {
+            to: '/university',
+            label: 'University',
+            sidebarId: 'universitySidebar',
+            position: 'right',
+          },
+
+          {
+            label: 'Tool',
+            to: '/tool',
+          },
+          {
+            label: 'Blog',
+            to: '/blog',
+          },
+          {
+            label: 'docusaurus',
+            to: 'https://docusaurus.io/',
+            position: 'right',
+          },
           {
             type: 'dropdown',
             label: 'Community',
-            position: 'left',
+            position: 'right',
             items: [
               {
                 label: 'Facebook',

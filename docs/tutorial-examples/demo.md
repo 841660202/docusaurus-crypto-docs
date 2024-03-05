@@ -10,3 +10,6 @@ sidebar_position: 1
 ## 参考项目
 
 <a href="https://docs.dyte.io" target="_blank"><strong>Explore the docs »</strong></a>
+<br/>
+
+<a href="https://github.com/841660202/docusaurus_docs.dyte.io" target="_blank"><strong>Explore the code »</strong></a>
