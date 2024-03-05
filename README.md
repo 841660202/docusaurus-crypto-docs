@@ -39,3 +39,9 @@ $ GIT_USER=<Your GitHub username> yarn deploy
 ```
 
 If you are using GitHub pages for hosting, this command is a convenient way to build the website and push to the `gh-pages` branch.
+git init
+git add .
+git commit -m "first commit"
+git branch -M main
+git remote add origin git@github.com:841660202/docusaurus-crypto-docs.git
+git push -u origin main
