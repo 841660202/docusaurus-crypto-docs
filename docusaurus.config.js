@@ -5,8 +5,8 @@
 // See: https://docusaurus.io/docs/api/docusaurus-config
 
 import { themes as prismThemes } from 'prism-react-renderer';
-const math = require('remark-math');
-const katex = require('rehype-katex');
+import remarkMath from 'remark-math';
+import rehypeKatex from 'rehype-katex';
 
 const defaultSettings = {
   breadcrumbs: true,
@@ -15,6 +15,8 @@ const defaultSettings = {
   sidebarCollapsible: true,
   remarkPlugins: [[require('@docusaurus/remark-plugin-npm2yarn'), { sync: true }]],
   sidebarPath: require.resolve('./sidebars-default.js'),
+  remarkPlugins: [remarkMath],
+  rehypePlugins: [rehypeKatex],
 };
 
 const docs = [
@@ -32,6 +34,11 @@ const docs = [
     id: 'university',
     path: 'university',
     routeBasePath: '/university',
+  },
+  {
+    id: 'token',
+    path: 'token',
+    routeBasePath: '/token',
   },
 ];
 
@@ -80,7 +87,11 @@ const config = {
     defaultLocale: 'en',
     locales: ['en'],
   },
-  plugins: [...docs_plugins],
+  plugins: [...docs_plugins, 'plugin-image-zoom'],
+  markdown: {
+    mermaid: true,
+  },
+  themes: ['@docusaurus/theme-mermaid'],
   presets: [
     [
       'classic',
@@ -91,8 +102,6 @@ const config = {
           // // Please change this to your repo.
           // // Remove this to remove the "edit this page" links.
           // editUrl: 'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
-          // remarkPlugins: [math],
-          // rehypePlugins: [katex],
           // // Equivalent to `enableUpdateBy`.
           // showLastUpdateAuthor: true,
           // // Equivalent to `enableUpdateTime`.
@@ -111,7 +120,14 @@ const config = {
       }),
     ],
   ],
-
+  stylesheets: [
+    {
+      href: 'https://cdn.jsdelivr.net/npm/katex@0.13.24/dist/katex.min.css',
+      type: 'text/css',
+      integrity: 'sha384-odtC+0UGzzFL/6PNoE8rX/SPcQDXBJ+uRepguP4QkPCm2LBxH3FA3y+fKSiJ+AmM',
+      crossorigin: 'anonymous',
+    },
+  ],
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
@@ -127,7 +143,7 @@ const config = {
         title: 'My Site',
         logo: {
           alt: 'My Site Logo',
-          src: 'img/logo.svg',
+          src: 'img/logo.webp',
         },
         items: [
           {
@@ -154,10 +170,16 @@ const config = {
           {
             label: 'Tool',
             to: '/tool',
+            sidebarId: 'toolSidebar',
           },
           {
             label: 'Blog',
             to: '/blog',
+          },
+          {
+            label: 'Token',
+            to: '/token',
+            sidebarId: 'tokenSidebar',
           },
           {
             label: 'docusaurus',
@@ -237,6 +259,19 @@ const config = {
         theme: prismThemes.github,
         darkTheme: prismThemes.dracula,
         additionalLanguages: ['solidity'],
+      },
+      imageZoom: {
+        // CSS selector to apply the plugin to, defaults to '.markdown img'
+        selector: '.markdown img',
+        // Optional medium-zoom options
+        // see: https://www.npmjs.com/package/medium-zoom#options
+        options: {
+          // margin: 24,
+          background: 'rgba(0,0,0,0.9)',
+          // scrollOffset: 10,
+          // container: '#zoom-container',
+          // template: '#zoom-template',
+        },
       },
     }),
 };
